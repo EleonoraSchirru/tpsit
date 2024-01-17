@@ -1,20 +1,172 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>stampa numeri</title>
-    <script>
-      function printNumbers() {
-          var inputNumber = document.getElementById("numberInput").value;
-          for (var i = 1; i <= inputNumber; i++) {
-              document.write(i + "<br>");
-          }
-          var tenPercent = inputNumber * 0.1;
-          document.write("10% of the input number is: " + tenPercent);
-      }
-    </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GIOCO SUMO</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: rgb(90, 220, 90);
+      text-align: center;
+    }
+    #field {
+      width: 500px;
+      height: 500px;
+      margin: 50px auto;
+      position: relative;
+      background-color: rgba(255, 255, 255, 0.858);
+    }
+    #player1 {
+      position: absolute;
+      top: 50%;
+      left: 10%;
+      transform: translate(-50%, -50%);
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: rgb(0, 191, 255);
+    }
+    #player2 {
+      position: absolute;
+      top: 50%;
+      left: 90%;
+      transform: translate(-50%, -50%);
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: rgba(196, 14, 14, 0.7);
+    }
+  </style>
 </head>
 <body>
-    <input type="number" id="numberInput">
-    <button onclick="printNumbers()">inserisci un numero</button>
+  <h1>Sumo Game</h1>
+  <div id="field">
+    <div id="player1"></div>
+    <div id="player2"></div>
+  </div>
+  <button id="startButton">INIZIATE A COMBATTERE</button>
+  <script>
+    let timer;
+    let timeLeft = 60;
+    let p1Score = 0;
+    let p2Score = 0;
+    function movePlayer1() {
+      document.getElementById("player1").style.top = Math.random() * 300 + "px";
+      p1Score++;
+    }
+    function movePlayer2() {
+      document.getElementById("player2").style.top = Math.random() * 300 + "px";
+      p2Score++;
+    }
+    function startTimer() {
+      countdown();
+      document.getElementById("startButton").disabled = true;
+    }
+    function countdown() {
+      timer = setInterval(function() {
+        timeLeft--;
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          if (p1Score > p2Score) {
+            alert("Player 1 wins!");
+          } else if (p2Score > p1Score) {
+            alert("Player 2 wins!");
+          } else {
+            alert("It's a tie!");
+          }
+        }
+      }, 1000);
+    }
+    document.getElementById("startButton").addEventListener("click", startTimer);
+    document.getElementById("player1").addEventListener("click", movePlayer1);
+    document.getElementById("player2").addEventListener("click", movePlayer2);
+  </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GIOCO SUMO</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: rgb(90, 220, 90);
+      text-align: center;
+    }
+    #field {
+      width: 500px;
+      height: 500px;
+      margin: 50px auto;
+      position: relative;
+      background-color: rgba(255, 255, 255, 0.858);
+    }
+    #player1 {
+      position: absolute;
+      top: 50%;
+      left: 10%;
+      transform: translate(-50%, -50%);
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: rgb(0, 191, 255);
+    }
+    #player2 {
+      position: absolute;
+      top: 50%;
+      left: 90%;
+      transform: translate(-50%, -50%);
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: rgba(196, 14, 14, 0.7);
+    }
+  </style>
+</head>
+<body>
+  <h1>Sumo Game</h1>
+  <div id="field">
+    <div id="player1"></div>
+    <div id="player2"></div>
+  </div>
+  <button id="startButton">INIZIATE A COMBATTERE</button>
+  <script>
+    let timer;
+    let timeLeft = 60;
+    let p1Score = 0;
+    let p2Score = 0;
+    function movePlayer1() {
+      document.getElementById("player1").style.top = Math.random() * 300 + "px";
+      p1Score++;
+    }
+    function movePlayer2() {
+      document.getElementById("player2").style.top = Math.random() * 300 + "px";
+      p2Score++;
+    }
+    function startTimer() {
+      countdown();
+      document.getElementById("startButton").disabled = true;
+    }
+    function countdown() {
+      timer = setInterval(function() {
+        timeLeft--;
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          if (p1Score > p2Score) {
+            alert("Player 1 wins!");
+          } else if (p2Score > p1Score) {
+            alert("Player 2 wins!");
+          } else {
+            alert("It's a tie!");
+          }
+        }
+      }, 1000);
+    }
+    document.getElementById("startButton").addEventListener("click", startTimer);
+    document.getElementById("player1").addEventListener("click", movePlayer1);
+    document.getElementById("player2").addEventListener("click", movePlayer2);
+  </script>
 </body>
 </html>
