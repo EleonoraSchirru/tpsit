@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Create Divs</title>
+  <style>
+    .square {
+      width: 10px;
+      height: 10px;
+      background-color: purple;
+      border: 1px solid black;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <input type="number" id="numDiv">
+  <button onclick="createDivs()">Create Divs</button>
+  <script>
+    function createDivs() {
+      var num = document.getElementById('numDiv').value;
+      for (var i = 0; i < num; i++) {
+        var div = document.createElement('div');
+        div.className = 'square';
+        document.body.appendChild(div);
+      }
+    }
+  </script>
+</body>
+</html>
+
+
