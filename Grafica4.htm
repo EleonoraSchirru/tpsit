@@ -1,38 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tabella 10x10</title>
-  <style>
-    table {
-      border-collapse: collapse;
-    }
-    td {
-      width: 20px;
-      height: 20px;
-      border: 1px solid black;
-      margin: 3px;
-    }
-    .gray {
-      background-color: lightgray;
-    }
-    .darkgray {
-      background-color: darkgray;
-    }
-  </style>
-</head>
-<body>
-  <table>
-    <script>
-      for (let i = 1; i <= 100; i++) {
-        document.write('<td class="' + (i % 2 === 0 ? 'gray' : 'darkgray') + '"><img src="' + (i % 2 === 0 ? 'pizza.jpg' : 'bomb.jpg') + '" alt="image" /></td>');
-        if (i % 10 === 0) {
-          document.write('<tr></tr>');
+  <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Tabella 10x10</title>
+      <style>
+        table {
+          border-collapse: collapse;
         }
-      }
-    </script>
-  </table>
-</body>
+        td {
+          width: 20px;
+          height: 20px;
+          border: 1px solid black;
+          margin: 2px;
+          display: inline-block;
+          position: relative;
+        }
+        .gray {
+          background-color: lightgray;
+        }
+        .darkgray {
+          background-color: darkgray;
+        }
+        img {
+          width: 20px;
+          height: 20px;
+          object-fit: cover;
+        }
+        #counter {
+          margin-top: 10px;
+        }
+        
+      </style>
+  </head>
+  <body>
+    <div id="counter">Pizza: 0 | Bombe: 0</div>
+    <table>
+      <script>
+        let pizzaCount = 0;
+        let bombCount = 0;
+        function addCount(type) {
+          if (type === 'pizza') {
+            pizzaCount++;
+          } else {
+            bombCount++;
+          }
+          document.getElementById('counter').innerText = 'Pizza: ' + pizzaCount + ' | Bombe: ' + bombCount;
+        }
+        for (let i = 1; i <= 100; i++) {
+          let backgroundColor = i % 2 === 0 ? 'gray' : 'darkgray';
+          let imageSrc = i % 2 === 0 ? 'pizza.jpg' : 'bomb.jpg';
+          let td = document.createElement('td');
+          let img = document.createElement('img');
+          img.setAttribute('src', imageSrc);
+          img.setAttribute('alt', 'image');
+          img.addEventListener('click', function() {
+            let type = imageSrc === 'pizza.jpg' ? 'pizza' : 'bomb';
+            addCount(type);
+          });
+          td.classList.add(backgroundColor);
+          td.appendChild(img);
+          document.querySelector('table').appendChild(td);
+          if (i % 10 === 0) {
+            let br = document.createElement('br');
+            document.querySelector('table').appendChild(br);
+          }
+        }
+      </script>
+    </table>
+  </body>
 </html>
