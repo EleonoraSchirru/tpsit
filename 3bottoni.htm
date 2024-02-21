@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>i tre bottoni</title>
+<style>
+    body{
+        font-family: arial;
+        text-align: center;
+    }
+    button{
+        margin: 15px;
+        padding: 8 px 15px;
+        font-size: 15px;
+        cursor: pointer;
+    }
+    #output{
+        margin margin-top: 20px;
+        font-size: 20px
+    }
+</style>
+</head>
+<body>
+<button id="botton1">bottone1</button>
+<button id="botton2">bottone2</button>
+<button id="botton3">bottone3</button>
+<div id="output"></div>
+<script>
+    var number=0;
+    function UpdateOutput() {
+        document.getElementbyId('output'),innertext="numero di adesso"+number;
+    }
+    document.getElementbyId('button1').addEventListener('click',function(){
+        number+=2;
+        UpdateOutput();
+    });
+
+
+    document.getElementbyId('button2').addEventListener('click',function(){
+
+
+        number+=3
+        UpdateOutput();
+    });
+
+
+    document.getElementbyId('button3').addEventListener('click',function(){
+
+
+        number+=7
+        UpdateOutput();
+    });
+</script>
+</body>
