@@ -70,6 +70,12 @@
     let player1Points = 0;
     let player2Points = 0;
 
+    let player1X = 50;
+    let player1Y = 150;
+
+    let player2X = 550;
+    let player2Y = 150;
+
     function checkCollision() {
       const rect1 = player1.getBoundingClientRect();
       const rect2 = player2.getBoundingClientRect();
@@ -105,6 +111,41 @@
         winnerText.style.color = 'blue';
       }
     }
+
+    function movePlayer1(direction) {
+      if (direction === 'W' && player1Y > 0) {
+        player1Y -= 10;
+      } else if (direction === 'A' && player1X > 0) {
+        player1X -= 10;
+      } else if (direction === 'S' && player1Y < 350) {
+        player1Y += 10;
+      } else if (direction === 'D' && player1X < 550) {
+        player1X += 10;
+      }
+      player1.style.left = player1X + 'px';
+      player1.style.top = player1Y + 'px';
+    }
+
+    function movePlayer2() {
+      const directions = ['W', 'A', 'S', 'D'];
+      const randomDirection = directions[Math.floor(Math.random() * directions.length)];
+      if (randomDirection === 'W' && player2Y > 0) {
+        player2Y -= 10;
+      } else if (randomDirection === 'A' && player2X > 0) {
+        player2X -= 10;
+      } else if (randomDirection === 'S' && player2Y < 350) {
+        player2Y += 10;
+      } else if (randomDirection === 'D' && player2X < 550) {
+        player2X += 10;
+      }
+      player2.style.left = player2X + 'px';
+      player2.style.top = player2Y + 'px';
+    }
+
+    document.addEventListener('keydown', function(event) {
+      movePlayer1(event.key.toUpperCase());
+      movePlayer2();
+    });
 
     player1.addEventListener('click', handleTouch);
     player2.addEventListener('click', handleTouch);
