@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Quadrati in Movimento</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+
+    .square {
+      width: 30px;
+      height: 30px;
+      background-color: blue;
+      position: absolute;
+      transition: top 1s ease-in-out;
+    }
+
+    .stopped {
+      background-color: red;
+    }
+  </style>
+</head>
+<body>
+
+  <script>
+    const squares = [];
+    const container = document.body;
+
+    for (let i = 0; i < 5; i++) {
+      const square = document.createElement('div');
+      square.classList.add('square');
+      square.style.top = '10px';
+      square.style.left = `${i * 50 + 50}px`; // Spazio tra i quadrati
+      container.appendChild(square);
+      squares.push(square);
+    }
+
+    let direction = 1; // 1 per il movimento verso il basso, -1 per il movimento verso l'alto
+    let isStopped = false;
+
+    function moveSquares() {
+      if (isStopped) return;
+
+      squares.forEach(square => {
+        const currentTop = parseInt(square.style.top, 10);
+        const newTop = currentTop + (direction * 10);
+
+        if (newTop >= 200 || newTop <= 10) {
+          direction *= -1;
+        }
+
+        square.style.top = `${newTop}px`;
+      });
+    }
+
+    setInterval(moveSquares, 100);
+
+    squares.forEach(square => {
+      square.addEventListener('click', () => {
+        square.classList.add('stopped');
+        isStopped = true;
+        squares.forEach(s => s.classList.add('stopped'));
+      });
+    });
+  </script>
+
+</body>
+</html>
