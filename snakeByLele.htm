@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game</title>
+
+    <!-- Link per Google Fonts (font script per il titolo) -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Stili di base per il corpo e la pagina */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #1e2a47; /* Colore di sfondo più scuro */
+            color: white;
+            font-family: 'Roboto', sans-serif; /* Cambiato font a Roboto */
+            position: relative; /* Posizionamento relativo per i componenti assoluti */
+        }
+
+        /* Titolo in alto con font Roboto */
+        .title {
+            position: absolute;
+            top: 40px; /* Abbassato un po' il titolo */
+            font-family: 'Roboto', sans-serif; /* Font Roboto */
+            font-size: 45px;
+            color: #ffcc00; /* Colore dorato per il titolo */
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8); /* Ombra del testo per farlo risaltare */
+            letter-spacing: 2px; /* Spaziatura tra le lettere */
+        }
+
+        /* Canvas dove verrà disegnato il gioco */
+        canvas {
+            border: 2px solid #ffcc00; /* Bordo dorato per il canvas */
+            background: linear-gradient(to bottom right, #283d58, #2c3e5c); /* Sfondo grigio scuro con gradiente */
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.8); /* Aggiungi ombra per un effetto di profondità */
+        }
+
+        /* Pattern sottile di linee per aggiungere texture allo sfondo */
+        .canvas-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: repeating-linear-gradient(45deg, #8e44ad 25%, transparent 25%, transparent 50%, #3498db 50%, #3498db 75%, transparent 75%, transparent);
+            background-size: 20px 20px; /* Spaziatura della griglia del pattern */
+            z-index: -1; /* Invia il pattern dietro il canvas */
+        }
+
+        /* Stile per la scoreboard che visualizza il punteggio */
+        .scoreboard {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-family: 'Roboto', sans-serif; /* Font Roboto */
+            font-size: 20px;
+            color: #ffcc00; /* Colore dorato per il titolo */
+            text-shadow: 3px 2px 6px rgba(0, 0, 0, 0.8); /* Ombra del testo per farlo risaltare */
+            letter-spacing: 1px; /* Spaziatura tra le lettere */
+        }
+
+        /* Scritta "MADE BY ELEONORA SCHIRRU" centrata in basso */
+        .footer {
+            position: absolute;
+            bottom: 46px; /* Posiziona la scritta in basso */
+            font-family: 'Roboto', sans-serif; /* Font Roboto */
+            font-size: 25px;
+            color: #ffcc00;
+            text-align: center;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8); /* Ombra del testo per farlo risaltare */
+            width: 100%;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Aggiungi il titolo sopra il canvas -->
+    <div class="title">LELE'S SNAKE</div>
+
+    <!-- Aggiunta di un elemento per il pattern di sfondo -->
+    <div class="canvas-background"></div>
+
+    <!-- Canvas dove verrà disegnato il gioco -->
+    <canvas id="game" width="400" height="400"></canvas>
+    
+    <!-- Div che visualizza il punteggio e il record massimo -->
+    <div class="scoreboard" id="scoreboard">
+        <p>Punteggio: 0</p>
+        <p>Record massimo: 0</p>
+    </div>
+
+    <!-- Scritta "MADE BY ELEONORA SCHIRRU" centrata in basso -->
+    <div class="footer">MADE BY ELEONORA SCHIRRU</div>
+
+    <script>
+        // Recupera il riferimento al canvas e al suo contesto
+        const canvas = document.getElementById('game');
+        const ctx = canvas.getContext('2d');
+
+        // Impostazioni di base per il gioco
+        const boxSize = 20; // Dimensione di ogni quadrato del serpente e del cibo
+        const canvasSize = canvas.width; // Ottieni la dimensione del canvas
+        let snake = [{ x: 200, y: 200 }]; // Posizione iniziale del serpente
+        let direction = 'RIGHT'; // Direzione iniziale del movimento del serpente
+        let food = { x: getRandomPosition(), y: getRandomPosition() }; // Posizione iniziale del cibo
+        let score = 0; // Punteggio iniziale
+        let highScore = localStorage.getItem('highScore') || 0; // Recupera il record massimo dal localStorage
+
+        // Variabili per gestire il movimento fluido
+        let dx = boxSize;  // Incremento della posizione X del serpente
+        let dy = 0;        // Incremento della posizione Y del serpente
+        let nextDx = boxSize;  // Prossimo incremento X (inizia con boxSize)
+        let nextDy = 0;        // Prossimo incremento Y (inizia con 0)
+
+        // Funzione che genera una posizione casuale per il cibo
+        function getRandomPosition() {
+            return Math.floor(Math.random() * (canvasSize / boxSize)) * boxSize;
+        }
+
+        // Disegna la griglia di sfondo
+        function drawGrid() {
+            ctx.strokeStyle = '#999'; // Colore dei bordi dei quadrati
+            ctx.lineWidth = 1;
+            for (let x = 0; x < canvasSize; x += boxSize) {
+                for (let y = 0; y < canvasSize; y += boxSize) {
+                    ctx.strokeRect(x, y, boxSize, boxSize); // Disegna il bordo del quadrato
+                }
+            }
+        }
+
+        // Disegna il serpente come cerchi verdi con bordi scuri
+        function drawSnake() {
+            snake.forEach((segment, index) => {
+                ctx.fillStyle = 'lime'; // Colore del serpente
+                ctx.strokeStyle = '#006400'; // Colore dei bordi del serpente
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(segment.x + boxSize / 2, segment.y + boxSize / 2, boxSize / 2, 0, Math.PI * 2); // Disegna il cerchio
+                ctx.fill(); // Riempi con il colore
+                ctx.stroke(); // Disegna il bordo
+            });
+        }
+
+        // Disegna il cibo come un cerchio rosso
+        function drawFood() {
+            ctx.fillStyle = 'red'; // Colore del cibo
+            ctx.beginPath();
+            ctx.arc(food.x + boxSize / 2, food.y + boxSize / 2, boxSize / 2, 0, Math.PI * 2); // Disegna il cerchio del cibo
+            ctx.fill(); // Riempi il cerchio con il colore
+        }
+
+        // Funzione che muove il serpente in modo fluido
+        function moveSnake() {
+            // Aggiungi la nuova testa
+            const head = { x: snake[0].x + nextDx, y: snake[0].y + nextDy };
+
+            // Se la testa del serpente mangia il cibo
+            if (head.x === food.x && head.y === food.y) {
+                score++; // Incrementa il punteggio
+                food = { x: getRandomPosition(), y: getRandomPosition() }; // Posiziona un nuovo cibo
+                // Aggiorna il record massimo se il punteggio corrente è maggiore
+                if (score > highScore) {
+                    highScore = score;
+                    localStorage.setItem('highScore', highScore); // Salva il nuovo record massimo
+                }
+            } else {
+                snake.pop(); // Rimuovi l'ultimo segmento se il cibo non è mangiato
+            }
+
+            // Aggiungi la nuova testa al serpente
+            snake.unshift(head);
+
+            // Aggiorna le variabili di movimento per il prossimo ciclo
+            dx = nextDx;
+            dy = nextDy;
+        }
+
+        // Funzione che verifica se c'è una collisione
+        function checkCollision() {
+            const head = snake[0];
+
+            // Collisione con i bordi del canvas
+            if (
+                head.x < 0 ||
+                head.x >= canvasSize ||
+                head.y < 0 ||
+                head.y >= canvasSize
+            ) {
+                return true; // Ritorna true se il serpente ha colpito i bordi
+            }
+
+            // Collisione con il corpo del serpente
+            for (let i = 1; i < snake.length; i++) {
+                if (head.x === snake[i].x && head.y === snake[i].y) {
+                    return true; // Ritorna true se il serpente colpisce se stesso
+                }
+            }
+
+            return false; // Nessuna collisione
+        }
+
+        // Cambia direzione del serpente in base alla pressione dei tasti
+        document.addEventListener('keydown', event => {
+            if (event.key === 'ArrowUp' && dy === 0) {
+                nextDx = 0;
+                nextDy = -boxSize;
+            }
+            if (event.key === 'ArrowDown' && dy === 0) {
+                nextDx = 0;
+                nextDy = boxSize;
+            }
+            if (event.key === 'ArrowLeft' && dx === 0) {
+                nextDx = -boxSize;
+                nextDy = 0;
+            }
+            if (event.key === 'ArrowRight' && dx === 0) {
+                nextDx = boxSize;
+                nextDy = 0;
+            }
+        });
+
+        // Funzione che aggiorna il punteggio e il record massimo
+        function updateScoreboard() {
+            const scoreboard = document.getElementById('scoreboard');
+            scoreboard.innerHTML = `<p>Punteggio: ${score}</p><p>Record massimo: ${highScore}</p>`;
+        }
+
+        // Funzione principale del gioco che aggiorna il canvas
+        function gameLoop() {
+            // Se il serpente collide con sé stesso o con i bordi, il gioco finisce
+            if (checkCollision()) {
+                alert(`Game Over! Punteggio: ${score}`); // Mostra il punteggio finale
+                document.location.reload(); // Ricarica la pagina per far partire una nuova partita
+            }
+
+            ctx.clearRect(0, 0, canvasSize, canvasSize); // Pulisci il canvas prima di ridisegnare
+            drawGrid(); // Disegna la griglia di sfondo
+            drawFood(); // Disegna il cibo
+            moveSnake(); // Muove il serpente
+            drawSnake(); // Disegna il serpente
+            updateScoreboard(); // Aggiorna la scoreboard
+        }
+
+        // Avvia il gioco con un intervallo di 100ms (circa 10 FPS)
+        setInterval(gameLoop, 100); // Esegui gameLoop ogni 100 millisecondi (10 FPS)
+    </script>
+</body>
+</html>
