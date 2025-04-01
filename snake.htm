@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #1e2a47, #2f3b50);
+            font-family: 'Roboto', sans-serif;
+            color: #ffffff;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .title {
+            position: absolute;
+            top: 20px;
+            font-size: 60px;
+            font-weight: bold;
+            color: #f39c12;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+            letter-spacing: 5px;
+        }
+
+        .menu {
+            text-align: center;
+            padding: 40px;
+            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: 20px;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .menu:hover {
+            box-shadow: 0 0 35px rgba(0, 0, 0, 0.9);
+        }
+
+        .menu select, .menu button {
+            font-size: 18px;
+            padding: 10px 20px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border: 2px solid #f39c12;
+            background-color: #f39c12;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .menu select:hover, .menu button:hover {
+            background-color: #f4a261;
+            border-color: #f4a261;
+        }
+
+        .menu select {
+            width: 200px;
+            text-align: center;
+        }
+
+        .scoreboard, .about-info, .scores-table {
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            font-size: 18px;
+            color: #f39c12;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        .scoreboard p, .about-info p, .scores-table p {
+            margin: 5px 0;
+        }
+
+        .scores-table table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center; /* Centra il testo nelle celle */
+            color: #fff;
+        }
+
+        .scores-table th, .scores-table td {
+            padding: 10px;
+            border: 1px solid #f39c12;
+            text-align: center; /* Centra il testo in tutte le celle */
+        }
+
+        .scores-table th {
+            background-color: #f39c12;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 30px;
+            font-size: 20px;
+            color: #f39c12;
+            text-align: center;
+            width: 100%;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+        }
+
+        canvas {
+            display: none;
+            border: 2px solid #f39c12;
+            background: #2e4d75;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .canvas-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #2f3b50 25%, transparent 25%) 0 0,
+                        linear-gradient(45deg, #2f3b50 25%, transparent 25%) 0 100%,
+                        linear-gradient(45deg, transparent 75%, #2f3b50 75%) 100% 0,
+                        linear-gradient(45deg, transparent 75%, #2f3b50 75%) 100% 100%;
+            background-size: 40px 40px;
+            z-index: -1;
+        }
+
+        #countdown {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 40px;
+            font-weight: bold;
+            color: #f39c12;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+            display: none; /* Inizialmente nascosto */
+            z-index: 999; /* Assicurarsi che il countdown sia sopra il canvas */
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="menu" id="menu">
+        <div class="title">LELE'S SNAKE</div>
+        <label for="game-mode">Scegli modalità di gioco:</label>
+        <select id="game-mode">
+            <option value="easy">Facile</option>
+            <option value="medium">Medio</option>
+            <option value="hard">Difficile</option>
+        </select>
+        <br><br>
+        <button id="start-game">Inizia Gioco</button>
+        <button id="view-scores">Vedi Punteggi</button>
+        <button id="about">Informazioni</button>
+    </div>
+
+    <div class="canvas-background"></div>
+    <canvas id="game" width="400" height="400"></canvas>
+
+    <div id="countdown"></div> <!-- Div per il countdown -->
+
+    <div class="scoreboard" id="scoreboard">
+        <p>Punteggio: 0</p>
+        <p>Record massimo: 0</p>
+    </div>
+
+    <div class="about-info" id="about-info">
+        <p>Snake Game - Comandi:</p>
+        <p>Usa le frecce direzionali per muovere il serpente.</p>
+        <p>Obiettivo: Mangiare il cibo e crescere senza colpire i bordi o te stesso!</p>
+        <p>Realizzato da Eleonora Schirru.</p>
+        <button id="back-to-menu-about">Torna al Menu</button>
+    </div>
+
+    <div class="scores-table" id="scores-table">
+        <p><strong>Tabella dei Punteggi</strong></p>
+        <table id="score-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Punteggio</th>
+                    <th>Data</th>
+                </tr>
+            </thead>
+            <tbody id="scores-list"></tbody>
+        </table>
+        <button id="back-to-menu">Torna al Menu</button>
+    </div>
+
+    <div class="footer">MADE BY ELEONORA SCHIRRU</div>
+
+    <script>
+        const menu = document.getElementById('menu');
+        const startButton = document.getElementById('start-game');
+        const gameCanvas = document.getElementById('game');
+        const scoreboard = document.getElementById('scoreboard');
+        const aboutInfo = document.getElementById('about-info');
+        const viewScoresButton = document.getElementById('view-scores');
+        const aboutButton = document.getElementById('about');
+        const scoresTable = document.getElementById('scores-table');
+        const backToMenuButton = document.getElementById('back-to-menu');
+        const backToMenuAboutButton = document.getElementById('back-to-menu-about');
+        const scoresList = document.getElementById('scores-list');
+        const countdownElement = document.getElementById('countdown');
+
+        const boxSize = 20;
+        const canvasSize = gameCanvas.width;
+        let snake = [{ x: 200, y: 200 }];
+        let direction = 'RIGHT';
+        let food = { x: getRandomPosition(), y: getRandomPosition() };
+        let score = 0;
+        let highScore = localStorage.getItem('highScore') || 0;
+
+        let dx = boxSize;
+        let dy = 0;
+        let nextDx = boxSize;
+        let nextDy = 0;
+
+        function getRandomPosition() {
+            return Math.floor(Math.random() * (canvasSize / boxSize)) * boxSize;
+        }
+
+        function startGame() {
+            menu.style.display = 'none'; // Nasconde il menu
+            gameCanvas.style.display = 'block'; // Mostra il canvas
+            scoreboard.style.display = 'block'; // Mostra la scoreboard
+            scoresTable.style.display = 'none'; // Nasconde la tabella dei punteggi
+            aboutInfo.style.display = 'none'; // Nasconde il pannello delle informazioni
+            countdownElement.style.display = 'block'; // Mostra il countdown
+            countdown(5); // Avvia il countdown di 5 secondi
+        }
+
+        function countdown(seconds) {
+            let timeRemaining = seconds;
+            countdownElement.innerText = `Inizio tra: ${timeRemaining}...`;
+            const countdownInterval = setInterval(() => {
+                timeRemaining--;
+                countdownElement.innerText = `Inizio tra: ${timeRemaining}...`;
+                if (timeRemaining <= 0) {
+                    clearInterval(countdownInterval);
+                    countdownElement.style.display = 'none'; // Nasconde il countdown
+                    gameLoop(); // Avvia il gioco
+                }
+            }, 1000);
+        }
+
+        function gameLoop() {
+            const ctx = gameCanvas.getContext('2d');
+            const loopInterval = setInterval(() => {
+                ctx.clearRect(0, 0, canvasSize, canvasSize);
+                moveSnake();
+                drawGrid(ctx);
+                drawFood(ctx);
+                drawSnake(ctx);
+                if (checkCollision()) {
+                    alert(`Game Over! Punteggio: ${score}`);
+                    saveScore();
+                    document.location.reload();
+                    clearInterval(loopInterval); // Ferma il loop del gioco
+                }
+                updateScoreboard();
+            }, 100);
+        }
+
+        function moveSnake() {
+            const head = { x: snake[0].x + nextDx, y: snake[0].y + nextDy };
+            if (head.x === food.x && head.y === food.y) {
+                score++;
+                food = { x: getRandomPosition(), y: getRandomPosition() };
+                if (score > highScore) {
+                    highScore = score;
+                    localStorage.setItem('highScore', highScore);
+                }
+            } else {
+                snake.pop();
+            }
+            snake.unshift(head);
+            dx = nextDx;
+            dy = nextDy;
+        }
+
+        function drawSnake(ctx) {
+            snake.forEach((segment) => {
+                ctx.fillStyle = '#32a852';
+                ctx.beginPath();
+                ctx.arc(segment.x + boxSize / 2, segment.y + boxSize / 2, boxSize / 2, 0, Math.PI * 2);
+                ctx.fill();
+            });
+        }
+
+        function drawFood(ctx) {
+            ctx.fillStyle = '#ff0000';
+            ctx.beginPath();
+            ctx.arc(food.x + boxSize / 2, food.y + boxSize / 2, boxSize / 2, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function drawGrid(ctx) {
+            ctx.strokeStyle = '#bbb';
+            ctx.lineWidth = 1;
+            for (let x = 0; x < canvasSize; x += boxSize) {
+                for (let y = 0; y < canvasSize; y += boxSize) {
+                    ctx.strokeRect(x, y, boxSize, boxSize);
+                }
+            }
+        }
+
+        function checkCollision() {
+            const head = snake[0];
+            if (head.x < 0 || head.x >= canvasSize || head.y < 0 || head.y >= canvasSize) {
+                return true;
+            }
+            for (let i = 1; i < snake.length; i++) {
+                if (head.x === snake[i].x && head.y === snake[i].y) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function updateScoreboard() {
+            scoreboard.innerHTML = `<p>Punteggio: ${score}</p><p>Record massimo: ${highScore}</p>`;
+        }
+
+        // Aggiungi controllo per non salvare punteggi inferiori a 5
+        function saveScore() {
+            if (score < 5) {
+                return; // Non salviamo il punteggio se è inferiore a 5
+            }
+            let savedScores = JSON.parse(localStorage.getItem('scores')) || [];
+            const newScore = {
+                score: score,
+                date: new Date().toLocaleString()
+            };
+            savedScores.push(newScore);
+            // Ordina i punteggi in ordine decrescente
+            savedScores.sort((a, b) => b.score - a.score);
+            // Limita la tabella a 10 punteggi
+            if (savedScores.length > 10) {
+                savedScores = savedScores.slice(0, 10);
+            }
+            localStorage.setItem('scores', JSON.stringify(savedScores));
+            updateScoreTable(savedScores);
+        }
+
+        function updateScoreTable(scores) {
+            scoresList.innerHTML = scores.map((score, index) => `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${score.score}</td>
+                    <td>${score.date}</td>
+                </tr>
+            `).join('');
+        }
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowUp' && dy === 0) {
+                nextDx = 0;
+                nextDy = -boxSize;
+            } else if (event.key === 'ArrowDown' && dy === 0) {
+                nextDx = 0;
+                nextDy = boxSize;
+            } else if (event.key === 'ArrowLeft' && dx === 0) {
+                nextDx = -boxSize;
+                nextDy = 0;
+            } else if (event.key === 'ArrowRight' && dx === 0) {
+                nextDx = boxSize;
+                nextDy = 0;
+            }
+        });
+
+        function showScores() {
+            menu.style.display = 'none';
+            aboutInfo.style.display = 'none';
+            scoreboard.style.display = 'none';
+            scoresTable.style.display = 'flex';
+
+            const savedScores = JSON.parse(localStorage.getItem('scores')) || [];
+            updateScoreTable(savedScores);
+        }
+
+        function showAboutInfo() {
+            menu.style.display = 'none';
+            scoreboard.style.display = 'none';
+            scoresTable.style.display = 'none';
+            aboutInfo.style.display = 'flex';
+        }
+
+        startButton.addEventListener('click', startGame);
+        viewScoresButton.addEventListener('click', showScores);
+        aboutButton.addEventListener('click', showAboutInfo);
+        backToMenuButton.addEventListener('click', () => {
+            scoresTable.style.display = 'none';
+            menu.style.display = 'block';
+        });
+        backToMenuAboutButton.addEventListener('click', () => {
+            aboutInfo.style.display = 'none';
+            menu.style.display = 'block';
+        });
+    </script>
+</body>
+</html>
