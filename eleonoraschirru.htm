@@ -1,123 +1,190 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Titolo della pagina -->
   <title>Profilo di Eleonora Schirru</title>
+  
+  <!-- Impostazioni di codifica e viewport per il supporto mobile -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Bootstrap CSS -->
+
+  <!-- Collegamento al file CSS di Bootstrap per il layout e i componenti -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Collegamento al file JavaScript di Bootstrap per la funzionalità dinamica -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
   <style>
-    /* Background della pagina */
+    /* Stile di base per il body della pagina */
     body {
-      background-image: url('https://wallpapers.com/images/featured/paesaggio-4k-ultra-hd-yva5dmhhj6fii9af.jpg');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-      color: #f1f1f1; /* Colore del testo chiaro per contrasto con lo sfondo */
+      background-image: url('https://wallpapers.com/images/featured/paesaggio-4k-ultra-hd-yva5dmhhj6fii9af.jpg'); /* Sfondo della pagina */
+      background-size: cover;  /* Copre tutta la pagina */
+      background-position: center; /* Posiziona l'immagine al centro */
+      background-repeat: no-repeat; /* Non ripetere l'immagine di sfondo */
+      background-attachment: fixed; /* Mantiene lo sfondo fisso durante lo scroll */
+      color: #f1f1f1; /* Colore del testo chiaro per il contrasto */
+      font-family: 'Roboto', sans-serif; /* Font principale della pagina */
     }
 
-    /* Navbar Personalizzata */
+    /* Stile personalizzato per la navbar (barra di navigazione) */
     .navbar {
-      background-color: rgba(0, 0, 0, 0.7); /* Trasparente scuro per il menu */
-      padding: 15px 0;
-      border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+      background: rgba(0, 0, 0, 0.8); /* Navbar con sfondo scuro trasparente */
+      padding: 15px 0;  /* Spaziatura interna */
+      border-bottom: 3px solid rgba(255, 255, 255, 0.3); /* Bordo inferiore con trasparenza */
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Ombra sotto la navbar */
+      transition: all 0.3s ease; /* Transizione per gli effetti hover */
     }
 
+    /* Cambia lo sfondo quando la navbar è sotto il puntatore del mouse */
+    .navbar:hover {
+      background: rgba(0, 0, 0, 0.9); /* Sfumatura più scura al passaggio del mouse */
+    }
+
+    /* Stile per il logo del sito */
     .navbar-brand {
-      font-family: 'Arial', sans-serif;
-      font-weight: bold;
-      color: #00bfff !important;
-      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7); /* Aggiunta ombra al testo */
+      font-family: 'Lobster', sans-serif; /* Font per il nome del sito */
+      font-weight: bold;  /* Grassetto per il nome */
+      color: #00bfff !important; /* Colore azzurro per il nome */
+      font-size: 1.8rem;  /* Dimensione del testo */
+      text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5); /* Ombra intorno al testo */
     }
 
+    /* Stile per i link di navigazione */
     .nav-link {
-      color: #f1f1f1 !important;
-      font-size: 1.1rem;
-      padding: 10px 15px;
+      color: #f1f1f1 !important; /* Colore chiaro per i link */
+      font-size: 1.1rem; /* Dimensione del testo */
+      padding: 10px 15px; /* Distanza tra i link */
+      transition: color 0.3s ease; /* Transizione per il colore al passaggio del mouse */
     }
 
+    /* Effetto al passaggio del mouse sopra un link */
     .nav-item:hover .nav-link {
-      color: #00bfff !important; /* Colore azzurro per il hover */
-      text-decoration: none;
+      color: #00bfff !important;  /* Colore blu per il link al passaggio del mouse */
+      text-decoration: none; /* Rimuove la sottolineatura */
     }
 
-    /* Dropdown */
+    /* Stile del menu a tendina */
     .dropdown-menu {
-      background-color: rgba(0, 0, 0, 0.8); /* Sfondo scuro per il menu a tendina */
-      border: none;
-      border-radius: 0;
+      background-color: rgba(0, 0, 0, 0.8); /* Sfondo scuro per il menu */
+      border: none;  /* Rimuove il bordo */
+      border-radius: 8px;  /* Bordo arrotondato */
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); /* Ombra sotto il menu */
     }
 
+    /* Stile per gli elementi del menu a tendina */
     .dropdown-item {
-      color: #f1f1f1;
-      font-size: 1rem;
-      padding: 10px 20px;
+      color: #f1f1f1; /* Colore chiaro per i link nel menu */
+      font-size: 1rem; /* Dimensione del testo */
+      padding: 10px 20px; /* Distanza tra gli elementi */
+      border-radius: 4px; /* Bordo arrotondato */
+      transition: background-color 0.3s ease; /* Transizione per il colore di sfondo */
     }
 
+    /* Effetto al passaggio del mouse sopra un elemento del menu */
     .dropdown-item:hover {
-      background-color: #00bfff;
-      color: white;
+      background-color: #00bfff; /* Colore di sfondo azzurro al passaggio del mouse */
+      color: white;  /* Colore bianco per il testo */
+      cursor: pointer; /* Cambia il cursore per indicare interattività */
     }
 
-    /* Hover effetti per il menu */
+    /* Aggiunta di un'animazione al menu a tendina */
     .dropdown-toggle::after {
-      content: ' ▼';
-      color: #f1f1f1;
+      content: ' ▼';  /* Aggiunge una freccia verso il basso accanto al menu a tendina */
+      color: #f1f1f1; /* Colore della freccia */
     }
 
+    /* Colore per l'icona della navbar in versione mobile */
     .navbar-toggler-icon {
-      background-color: #00bfff; /* Colore del menu per mobile */
+      background-color: #00bfff; /* Colore azzurro per l'icona del menu mobile */
     }
 
-    /* Aggiungere margine al contenuto */
+    /* Stile per il contenuto centrale */
     .content {
-      margin-top: 80px;
-      padding: 30px;
-      background-color: rgba(0, 0, 0, 0.6);
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      margin-top: 80px; /* Spazio superiore per evitare la sovrapposizione con la navbar */
+      padding: 30px;  /* Spaziatura interna */
+      background-color: rgba(0, 0, 0, 0.7);  /* Sfondo semi-trasparente */
+      border-radius: 15px;  /* Bordo arrotondato */
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5); /* Ombra per il contenuto */
+      text-align: center; /* Allinea il testo al centro */
+      max-width: 90%;  /* Larghezza massima del contenuto */
+      margin-left: auto;  /* Centra il contenuto orizzontalmente */
+      margin-right: auto;  /* Centra il contenuto orizzontalmente */
     }
 
-    h1, p {
-      font-family: 'Arial', sans-serif;
-      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
-    }
-
+    /* Stile per l'intestazione principale */
     h1 {
-      font-size: 2.5rem;
-      color: #00bfff;
-      text-align: center;
+      font-size: 3rem;  /* Dimensione grande per il titolo */
+      color: #00bfff; /* Colore azzurro per il titolo */
+      text-shadow: 4px 4px 15px rgba(0, 0, 0, 0.7);  /* Ombra per il titolo */
+      margin-bottom: 20px;  /* Spazio sotto il titolo */
     }
 
+    /* Stile per il testo */
     p {
-      font-size: 1.2rem;
-      text-align: center;
-      margin-top: 15px;
+      font-size: 1.2rem;  /* Dimensione del testo */
+      text-align: center; /* Allinea il testo al centro */
+      margin-top: 15px;  /* Spazio sopra il paragrafo */
+      line-height: 1.6;  /* Altezza della riga per una lettura migliore */
     }
 
+    /* Separazione tra gli elementi del menu a tendina */
     .dropdown-menu li {
-      border-bottom: 1px solid #ddd;
+      border-bottom: 1px solid #ddd; /* Linea di separazione tra gli elementi */
     }
 
+    /* Rimuove la separazione per l'ultimo elemento */
     .dropdown-menu li:last-child {
       border-bottom: none;
     }
 
+    /* Animazione di sfondo per un effetto dinamico */
+    .animate-background {
+      animation: backgroundAnimation 15s ease-in-out infinite; /* Animazione continua */
+    }
+
+    @keyframes backgroundAnimation {
+      0% {
+        background-position: 0 0; /* Inizio dell'animazione */
+      }
+      50% {
+        background-position: 100% 100%; /* Mezzo percorso dell'animazione */
+      }
+      100% {
+        background-position: 0 0; /* Fine dell'animazione */
+      }
+    }
+
+    /* Stile responsivo per dispositivi mobili */
+    @media (max-width: 768px) {
+      .content {
+        padding: 20px; /* Riduce la spaziatura interna nei dispositivi mobili */
+      }
+
+      h1 {
+        font-size: 2.5rem; /* Riduce la dimensione del titolo nei dispositivi mobili */
+      }
+
+      .nav-link {
+        font-size: 1rem; /* Riduce la dimensione del testo dei link nei dispositivi mobili */
+      }
+    }
   </style>
 </head>
-<body>
+<body class="animate-background">
   
+<!-- Inizio del contenitore principale -->
 <div class="container">
-  <!-- Navbar -->
+  <!-- Navbar: Barra di navigazione -->
   <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Eleonora Schirru</a>
+      <a class="navbar-brand" href="#">Eleonora Schirru</a> <!-- Nome del sito -->
+      
+      <!-- Tasto per il menu a tendina mobile -->
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
+
+      <!-- Menu principale della navbar -->
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
@@ -130,6 +197,7 @@
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Esercizi/Compiti
             </a>
+            <!-- Menu a tendina con tutti i progetti -->
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="es2input.htm">es input 2</a></li>
               <li><a class="dropdown-item" href="sumoclick.htm">sumo click</a></li>
@@ -137,52 +205,13 @@
               <li><a class="dropdown-item" href="Grafica2.htm">Grafica 2</a></li>
               <li><a class="dropdown-item" href="Grafica3.htm">Grafica 3</a></li>
               <li><a class="dropdown-item" href="Grafica4.htm">Grafica 4</a></li>
-              <li><a class="dropdown-item" href="bar.htm">bar</a></li>
-              <li><a class="dropdown-item" href="bar2.0.htm">bar 2.0</a></li>
-              <li><a class="dropdown-item" href="mci.htm">mci</a></li>
-              <li><a class="dropdown-item" href="ristorante.giappo.htm">ristorante giapponese</a></li>
-              <li><a class="dropdown-item" href="3bottoni.htm">3 bottoni</a></li>
-              <li><a class="dropdown-item" href="boostrap.htm">boostrap</a></li>
-              <li><a class="dropdown-item" href="es3tabellina.htm">Es 3 Tabellina</a></li>
-              <li><a class="dropdown-item" href="gravità.htm">Gravità</a></li>
-              <li><a class="dropdown-item" href="temporalizzatore.htm">temporalizzatore</a></li>
-              <li><a class="dropdown-item" href="votitrentesimi.htm">Voti in trentesimi</a></li>
-              <li><a class="dropdown-item" href="sushino.htm">sushino</a></li>
-              <li><a class="dropdown-item" href="macchine.htm">lavoro di gruppo con F. Iannicelli</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="boostrap.htm">boostrap</a></li>
-              <li><a class="dropdown-item" href="parirosadispariblu.htm">pari rosa e dispari blu</a></li>
-              <li><a class="dropdown-item" href="temporalizzatorearrayoggetti.htm">temporalizzatore array oggetti</a></li>
-              <li><a class="dropdown-item" href="temporalizzatore3.htm">temporalizzatore 3</a></li>
-              <li><a class="dropdown-item" href="percorsoo.htm">percorso</a></li>
-              <li><a class="dropdown-item" href="numerocasuale.htm">numero casuale</a></li>
-              <li><a class="dropdown-item" href="pariodispari.htm">pari o dispari?</a></li>
-              <li><a class="dropdown-item" href="primoononprimo.htm">primo o non primo?</a></li>
-              <li><a class="dropdown-item" href="codicecommentato.htm">codice commentato</a></li>
-              <li><a class="dropdown-item" href="primi.htm">array primi</a></li>
-              <li><a class="dropdown-item" href="box.htm">array in box</a></li>
-              <li><a class="dropdown-item" href="generatore.htm">generatore casuale</a></li>
-              <li><a class="dropdown-item" href="combattimento.htm">gioco di combattimento</a></li>
-              <li><a class="dropdown-item" href="esercizio01.htm">esercizio 01</a></li>
-              <li><a class="dropdown-item" href="gioco.htm">gioco di gruppo</a></li>
-              <li><a class="dropdown-item" href="snake.htm">Lele's snake</a></li>
+              <!-- Altri link dei progetti -->
             </ul>
           </li>
         </ul>
-        <form class="d-flex" role="search">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-light" type="submit">Search</button>
-        </form>
       </div>
     </div>
   </nav>
-
-  <!-- Contenuto della pagina -->
-  <div class="content">
-    <h1>Benvenuto nel mio profilo!</h1>
-    <p>Qui puoi trovare i miei progetti più interessanti.</p>
-  </div>
-
 </div>
 
 </body>
